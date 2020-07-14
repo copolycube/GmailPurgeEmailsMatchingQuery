@@ -7,24 +7,32 @@ function cleanUp() {
   var conditions_array = ['label:30days_delete',
                           'label:online_store-totoStore', 
                           'from:bonsplans@newsletter.travel.com',
-                          'label:paris-freecycle'
+                          'label:paris-freecycle',
                           'label:paris-do-it-in-paris'
                          ]
-  mySearch = conditions_array.join(' OR ')
+  //mySearch = conditions_array.join(' OR ')
   
-  console.log("Searching e-mails matching query: " + mySearch)
-  //-- code
-  var maxDate = new Date();
-  maxDate.setDate(maxDate.getDate()-delayDays);
-  var tmp_threads = GmailApp.search(mySearch);
-  var threads = [];
-  var threads = threads.concat(tmp_threads);
-  console.log("... moving "+threads.length+ " to the trash folder")
   
-  for (var i = 0; i < threads.length; i++) {
-    if (threads[i].getLastMessageDate()<maxDate)
+  function moveSearchedToTrash(mySearch) {
+    console.log({message: 'Search e-mail threads matching query: '+mySearch, initialData: mySearch});
+    //-- code
+    var maxDate = new Date();
+    maxDate.setDate(maxDate.getDate()-delayDays);
+    var tmp_threads = GmailApp.search(mySearch);
+    var threads = [];
+  
+    var threads = threads.concat(tmp_threads);
+    console.log("Number of moved threads to the trash folder="+threads.length)
+  
+    for (var i = 0; i < threads.length; i++) {
+      if (threads[i].getLastMessageDate() < maxDate)
       {
         threads[i].moveToTrash();
       }
+    }
+  }
+  
+  for (var i = conditions_array.length-1; i > -1 ; i--) {
+    moveSearchedToTrash(conditions_array[i])
   }
 }
