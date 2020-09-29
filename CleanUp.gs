@@ -10,7 +10,7 @@ function cleanUp() {
                           'label:paris-freecycle',
                           'label:paris-do-it-in-paris'
                          ]
-  //mySearch = conditions_array.join(' OR ')
+  var exclusion_query = " -in:starred"
   
   
   function moveSearchedToTrash(mySearch) {
@@ -33,6 +33,6 @@ function cleanUp() {
   }
   
   for (var i = conditions_array.length-1; i > -1 ; i--) {
-    moveSearchedToTrash(conditions_array[i])
+    moveSearchedToTrash(conditions_array[i]+exclusion_query)
   }
 }
